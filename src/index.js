@@ -1,4 +1,5 @@
 const express = require('express');
+const readFile = require('./utils/readFile');
 
 const app = express();
 app.use(express.json());
@@ -13,4 +14,10 @@ app.get('/', (_request, response) => {
 
 app.listen(PORT, () => {
   console.log('Online');
+});
+
+// REQ. 01: LISTAR TODOS OS TALKERS
+app.get('/talker', async (_req, res) => {
+  const talkers = await readFile();
+  res.status(200).json(talkers);
 });
