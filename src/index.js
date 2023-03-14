@@ -24,6 +24,16 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
+// REQ. 07: DELETAR TALKER PELO ID
+app.delete('/talker/:id', validateAuth, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readFile();
+  const filteredTalkers = talkers.filter((talker) => talker.id !== Number(id));
+  const updatedTalkers = JSON.stringify(filteredTalkers, null, 2);
+  await writeFile(updatedTalkers);
+  return res.status(204).end();
+});
+
 // REQ. 05: CADASTRAR NOVO TALKER
 app.post('/talker', validateAuth, validateName, validateAge, validateTalk,
   validateRate, async (req, res) => {
