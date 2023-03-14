@@ -1,8 +1,13 @@
 const express = require('express');
 
 const readFile = require('./utils/readFile');
+const writeFile = require('./utils/writeFile');
 const generateToken = require('./utils/generateToken');
 const validateLogin = require('./middlewares/validateLogin');
+const validateAuth = require('./middlewares/validateAuth');
+const validateName = require('./middlewares/validateName');
+const validateAge = require('./middlewares/validateAge');
+const { validateTalk, validateRate } = require('./middlewares/validateTalk');
 
 const app = express();
 app.use(express.json());
@@ -17,6 +22,20 @@ app.get('/', (_request, response) => {
 
 app.listen(PORT, () => {
   console.log('Online');
+});
+
+// REQ. 05: CADASTRAR NOVO TALKER
+app.post('/talker', validateAuth, validateName, validateAge, validateTalk,
+  validateRate, async (req, res) => {
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+  const talkers = await readFile();
+
+  const newTalker = { id: talkers.length + 1, name, age, talk: { watchedAt, rate } };
+  // const allTalkers = JSON.stringify([...talkers, newTalker]);
+  talkers.push(newTalker);
+  await writeFile(talkers);
+
+  return res.status(201).json(newTalker);
 });
 
 // REQ. 03: ROTA LOGIN E RETORNO TOKEN
