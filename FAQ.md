@@ -339,3 +339,5 @@ Esse passo é super importante para ganhar mais visibilidade no mercado de traba
 E você sabia que o LinkedIn é a principal rede social profissional e compartilhar o seu aprendizado lá é muito importante para quem deseja construir uma carreira de sucesso? Compartilhe esse projeto no seu LinkedIn, marque o perfil da Trybe (@trybe) e mostre para a sua rede toda a sua evolução.
 
 </details>
+
+<!-- First commit -->
