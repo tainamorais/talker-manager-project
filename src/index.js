@@ -34,6 +34,21 @@ app.delete('/talker/:id', validateAuth, async (req, res) => {
   return res.status(204).end();
 });
 
+// REQ. 06: EDITAR TALKER PELO ID
+app.put('/talker/:id', validateAuth, validateName, validateAge, validateTalk,
+  validateRate, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+  const talkers = await readFile();
+  const index = talkers.findIndex((talker) => talker.id === Number(id));
+  if (!talkers[index]) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  talkers[index] = { id: Number(id), name, age, talk: { watchedAt, rate } };
+  await writeFile(talkers);
+  return res.status(200).json(talkers[index]);
+});
+
 // REQ. 05: CADASTRAR NOVO TALKER
 app.post('/talker', validateAuth, validateName, validateAge, validateTalk,
   validateRate, async (req, res) => {
@@ -71,3 +86,8 @@ app.get('/talker', async (_req, res) => {
   const talkers = await readFile();
   res.status(200).json(talkers);
 });
+
+/*
+Fonte de consulta da maior parte dos requisitos:
+https://app.betrybe.com/learn/course/5e938f69-6e32-43b3-9685-c936530fd326/module/94d0e996-1827-4fbc-bc24-c99fb592925b/section/2ed87e4f-9049-4314-8091-8f71b1925cf6/day/4982a599-9832-419e-a96b-3fe1db634c3e/lesson/9caf3f05-59f1-4959-8f92-bfe0ff66f49c/solution
+*/
