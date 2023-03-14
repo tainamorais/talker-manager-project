@@ -1,6 +1,8 @@
 const express = require('express');
+
 const readFile = require('./utils/readFile');
 const generateToken = require('./utils/generateToken');
+const validateLogin = require('./middlewares/validateLogin');
 
 const app = express();
 app.use(express.json());
@@ -18,7 +20,8 @@ app.listen(PORT, () => {
 });
 
 // REQ. 03: ROTA LOGIN E RETORNO TOKEN
-app.post('/login', (_req, res) => {
+// REQ. 04: MIDDLEWARE VALIDAÇÃO LOGIN
+app.post('/login', validateLogin, (_req, res) => {
   const token = generateToken();
   return res.status(200).json({ token });
 });
