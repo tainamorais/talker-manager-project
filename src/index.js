@@ -31,7 +31,7 @@ app.post('/talker', validateAuth, validateName, validateAge, validateTalk,
   const talkers = await readFile();
 
   const newTalker = { id: talkers.length + 1, name, age, talk: { watchedAt, rate } };
-  // const allTalkers = JSON.stringify([...talkers, newTalker]);
+  // const allTalkers = JSON.stringify([...talkers, newTalker]); - não funcionou
   talkers.push(newTalker);
   await writeFile(talkers);
 
