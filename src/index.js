@@ -1,5 +1,6 @@
 const express = require('express');
 const readFile = require('./utils/readFile');
+const generateToken = require('./utils/generateToken');
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,12 @@ app.get('/', (_request, response) => {
 
 app.listen(PORT, () => {
   console.log('Online');
+});
+
+// REQ. 03: ROTA LOGIN E RETORNO TOKEN
+app.post('/login', (_req, res) => {
+  const token = generateToken();
+  return res.status(200).json({ token });
 });
 
 // REQ. 02: LISTAR TALKER PELO ID
