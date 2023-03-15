@@ -24,6 +24,14 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
+// REQ. 08: SEARCH TALKER QUERYPARAM
+app.get('/talker/search', validateAuth, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readFile();
+  const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+  return res.status(200).json(filteredTalkers);
+});
+
 // REQ. 07: DELETAR TALKER PELO ID
 app.delete('/talker/:id', validateAuth, async (req, res) => {
   const { id } = req.params;
