@@ -8,6 +8,7 @@ const validateAuth = require('./middlewares/validateAuth');
 const validateName = require('./middlewares/validateName');
 const validateAge = require('./middlewares/validateAge');
 const { validateTalk, validateRate } = require('./middlewares/validateTalk');
+const validateRatePatch = require('./middlewares/validateRatePatch');
 
 const app = express();
 app.use(express.json());
@@ -24,12 +25,27 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-// REQ. 08: SEARCH TALKER QUERYPARAM
+// REQ. 11: ALTERAR RATE PELO ID (PATCH)
+app.patch('/talker/rate/:id', validateAuth, validateRatePatch, async (req, res) => {
+  const { id } = req.params;
+  const { rate } = req.body;
+  const talkers = await readFile();
+  const index = talkers.findIndex((talker) => talker.id === Number(id));
+  // Mesmo princípio do req 06. Após identificar pelo id, fazer a alteração (igual ex course).
+  talkers[index].talk.rate = rate;
+  await writeFile(talkers);
+  return res.status(204).end();
+});
+
+// REQ. 08: SEARCH TALKER BY NAME (QUERYPARAM)
 app.get('/talker/search', validateAuth, async (req, res) => {
   const { q } = req.query;
   const talkers = await readFile();
-  const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
-  return res.status(200).json(filteredTalkers);
+  if (q) {
+    const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+    return res.status(200).json(filteredTalkers);
+  }
+  return res.status(200).json(talkers);
 });
 
 // REQ. 07: DELETAR TALKER PELO ID
